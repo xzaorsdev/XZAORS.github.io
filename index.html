@@ -1,1 +1,343 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#120b20">
+  <meta name="description" content="XZaorsDev, Minecraft modder y desarrollador de videojuegos. Proyectos, mods y experimentos.">
+  <title>XZaorsDev | Minecraft Modder & Game Developer</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d0915;
+      --panel: rgba(27, 17, 43, .82);
+      --panel-strong: #1b112b;
+      --purple: #b78aff;
+      --purple-bright: #d7b8ff;
+      --purple-deep: #7042b8;
+      --text: #f4efff;
+      --muted: #b8abc9;
+      --line: rgba(200, 165, 255, .22);
+      --green: #9be5bc;
+      --shadow: 0 18px 60px rgba(0, 0, 0, .32);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 50% -15%, rgba(116, 61, 178, .30), transparent 55%),
+        radial-gradient(ellipse at 85% 35%, rgba(71, 37, 115, .15), transparent 35%),
+        var(--bg);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a:focus-visible, button:focus-visible { outline: 2px solid var(--purple-bright); outline-offset: 4px; }
+    .stars, .stars::before, .stars::after {
+      position: fixed; inset: 0; pointer-events: none; content: ""; z-index: -1;
+      background-image:
+        radial-gradient(2px 2px at 12% 18%, rgba(231,211,255,.7) 50%, transparent 60%),
+        radial-gradient(2px 2px at 82% 22%, rgba(231,211,255,.6) 50%, transparent 60%),
+        radial-gradient(1px 1px at 65% 70%, rgba(231,211,255,.55) 50%, transparent 60%),
+        radial-gradient(2px 2px at 28% 82%, rgba(231,211,255,.5) 50%, transparent 60%),
+        radial-gradient(1px 1px at 92% 88%, rgba(231,211,255,.55) 50%, transparent 60%);
+      opacity: .55;
+    }
+    .stars::before { transform: translate(32px, 18px); opacity: .4; }
+    .wrap { width: min(1080px, calc(100% - 36px)); margin-inline: auto; }
+    header {
+      position: sticky; top: 0; z-index: 10;
+      backdrop-filter: blur(16px);
+      background: rgba(13, 9, 21, .78);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 72px; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 900; letter-spacing: -.04em; }
+    .pixel-mark {
+      width: 30px; height: 30px; position: relative; display: inline-block;
+      background: #8d58d4; border: 3px solid #d6baff;
+      box-shadow: inset -6px -6px 0 #5d3198, inset 5px 5px 0 #bd91ff, 4px 4px 0 #38224f;
+      image-rendering: pixelated; transform: rotate(-3deg);
+    }
+    .nav-right { display: flex; align-items: center; gap: 18px; }
+    .nav-links { display: flex; gap: 18px; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: .86rem; }
+    .nav-links a:hover { color: var(--purple-bright); }
+    .lang-btn, .btn {
+      font: inherit; font-weight: 800; text-decoration: none; cursor: pointer;
+      border: 1px solid var(--line); color: var(--text); background: rgba(183,138,255,.08);
+      padding: 10px 14px; border-radius: 8px; transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .lang-btn:hover, .btn:hover { transform: translateY(-2px); background: rgba(183,138,255,.16); border-color: var(--purple); }
+    .btn.primary { background: var(--purple); color: #170c24; border-color: var(--purple); }
+    .btn.primary:hover { background: var(--purple-bright); }
+    .hero { min-height: 600px; display: grid; align-items: center; padding: 76px 0 84px; }
+    .hero-grid { display: grid; grid-template-columns: 1.35fr .65fr; align-items: center; gap: 44px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--green); font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; font-weight: 800; }
+    .status-dot { width: 8px; height: 8px; background: var(--green); box-shadow: 0 0 12px rgba(155,229,188,.7); display: inline-block; }
+    h1 { font-size: clamp(2.8rem, 8vw, 5.7rem); line-height: .99; letter-spacing: -.085em; margin: 22px 0 16px; }
+    h1 .accent { color: var(--purple-bright); text-shadow: 0 0 30px rgba(183,138,255,.18); }
+    .subtitle { color: var(--purple); font-size: clamp(1rem, 2vw, 1.2rem); font-weight: 800; }
+    .intro { color: var(--muted); max-width: 660px; font-family: system-ui, sans-serif; font-size: 1.08rem; margin: 24px 0 28px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .hero-art { min-height: 300px; display: grid; place-items: center; position: relative; }
+    .portal {
+      width: min(260px, 70vw); aspect-ratio: 1; position: relative; display: grid; place-items: center;
+      border: 3px solid #d6baff; outline: 8px solid rgba(120,72,183,.2);
+      box-shadow: 0 0 0 16px rgba(120,72,183,.08), 0 0 65px rgba(148,91,218,.24), inset 0 0 45px rgba(148,91,218,.2);
+      background: repeating-linear-gradient(0deg, rgba(177,129,255,.09) 0 4px, transparent 4px 16px), rgba(39,20,62,.55);
+      animation: float 5s ease-in-out infinite;
+    }
+    .portal::before, .portal::after { content: ""; position: absolute; inset: 18px; border: 2px dashed rgba(220,195,255,.45); }
+    .portal::after { inset: 36px; border: 3px solid rgba(183,138,255,.5); }
+    .cube {
+      width: 100px; height: 100px; z-index: 1; position: relative; transform: rotate(45deg);
+      background: linear-gradient(135deg, #c39aff 0 25%, #8d58d4 25% 65%, #60369b 65%);
+      border: 4px solid #e6d5ff; box-shadow: 12px 12px 0 #3a2358, 0 0 40px rgba(183,138,255,.4);
+    }
+    .cube::after { content: ""; position: absolute; width: 25px; height: 25px; background: #f0e6ff; top: 15px; left: 15px; box-shadow: 36px 36px 0 rgba(240,230,255,.55); }
+    .floating-tag { position: absolute; font-size: .72rem; color: var(--purple-bright); border: 1px solid var(--line); background: #160d23; padding: 6px 9px; }
+    .tag-a { top: 8%; right: -3%; } .tag-b { bottom: 8%; left: -4%; }
+    section { padding: 68px 0; scroll-margin-top: 85px; }
+    .section-head { margin-bottom: 28px; }
+    .kicker { color: var(--purple); font-size: .75rem; text-transform: uppercase; letter-spacing: .14em; font-weight: 900; }
+    h2 { margin: 5px 0 0; font-size: clamp(1.8rem, 4vw, 2.65rem); letter-spacing: -.06em; line-height: 1.15; }
+    .section-copy { color: var(--muted); font-family: system-ui, sans-serif; max-width: 700px; }
+    .about-panel, .project-card, .skill-panel {
+      background: linear-gradient(145deg, rgba(37,23,57,.9), rgba(20,13,31,.9));
+      border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow);
+    }
+    .about-panel { padding: 26px; display: grid; grid-template-columns: 52px 1fr; gap: 20px; }
+    .pixel-icon { width: 48px; height: 48px; display: grid; place-items: center; color: #1a0e27; background: var(--purple); border: 4px solid #e1ceff; box-shadow: inset -5px -5px 0 #7d4cb9; font-size: 1.35rem; }
+    .about-panel p { margin: 0; color: #d3c8e2; font-family: system-ui, sans-serif; }
+    .projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .project-card { overflow: hidden; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+    .project-card:hover { transform: translateY(-5px); border-color: rgba(207,176,255,.7); box-shadow: 0 24px 65px rgba(0,0,0,.42); }
+    .project-banner { height: 150px; display: grid; place-items: center; position: relative; overflow: hidden; background: #24143a; border-bottom: 1px solid var(--line); }
+    .project-banner::before { content: ""; position: absolute; inset: 0; opacity: .45; background-image: linear-gradient(45deg, #7544ad 25%, transparent 25%), linear-gradient(-45deg, #7544ad 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #7544ad 75%), linear-gradient(-45deg, transparent 75%, #7544ad 75%); background-size: 36px 36px; background-position: 0 0, 0 18px, 18px -18px, -18px 0; }
+    .banner-symbol { z-index: 1; font-size: 3.1rem; filter: drop-shadow(4px 5px 0 #382052); }
+    .project-content { padding: 22px; }
+    .project-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .project-top h3 { margin: 0; font-size: 1.25rem; letter-spacing: -.04em; }
+    .pill { color: var(--purple-bright); border: 1px solid rgba(183,138,255,.3); border-radius: 5px; padding: 3px 7px; font-size: .67rem; white-space: nowrap; }
+    .project-content p { color: var(--muted); font-family: system-ui, sans-serif; font-size: .95rem; min-height: 76px; }
+    .project-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+    .tech { color: #d4c1f2; font-size: .75rem; }
+    .text-link { color: var(--purple-bright); text-decoration: none; font-size: .85rem; font-weight: 900; }
+    .text-link:hover { text-decoration: underline; }
+    .skill-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .skill-panel { padding: 18px; }
+    .skill-panel strong { display: block; margin-bottom: 5px; }
+    .skill-panel span { color: var(--muted); font-size: .85rem; }
+    .contact-box { padding: 30px; border: 1px solid var(--line); border-radius: 12px; background: radial-gradient(ellipse at 100% 0%, rgba(117,66,184,.23), transparent 45%), var(--panel); display: flex; justify-content: space-between; align-items: center; gap: 24px; }
+    .contact-box p { margin-bottom: 0; color: var(--muted); font-family: system-ui, sans-serif; }
+    footer { border-top: 1px solid var(--line); padding: 24px 0 32px; color: var(--muted); font-size: .78rem; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+    .reveal { opacity: 0; transform: translateY(12px); transition: opacity .55s ease, transform .55s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+    @media (max-width: 760px) {
+      .nav { min-height: 64px; } .nav-links { display: none; } .hero { min-height: auto; padding: 66px 0; }
+      .hero-grid { grid-template-columns: 1fr; gap: 28px; } .hero-art { min-height: 250px; grid-row: 1; }
+      .portal { width: 190px; } .cube { width: 75px; height: 75px; } .projects { grid-template-columns: 1fr; }
+      .skill-grid { grid-template-columns: 1fr; } .contact-box { align-items: flex-start; flex-direction: column; }
+      section { padding: 48px 0; } .about-panel { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#inicio" aria-label="XZaorsDev, inicio"><span class="pixel-mark" aria-hidden="true"></span><span>XZaorsDev</span></a>
+      <div class="nav-right">
+        <nav class="nav-links" aria-label="Navegación principal">
+          <a href="#sobre" data-i18n="navAbout">Sobre mí</a>
+          <a href="#proyectos" data-i18n="navProjects">Proyectos</a>
+          <a href="#contacto" data-i18n="navContact">Contacto</a>
+        </nav>
+        <button class="lang-btn" id="languageToggle" type="button" aria-label="Cambiar idioma">EN / ES</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="status-dot"></span><span data-i18n="eyebrow">CREANDO EN EL END</span></div>
+          <h1><span data-i18n="heroPrefix">Hola, soy</span><br><span class="accent">XZaorsDev</span><span class="accent">.</span></h1>
+          <div class="subtitle">Minecraft modder &amp; game developer</div>
+          <p class="intro" data-i18n="intro">Me gusta crear proyectos de Minecraft profundos y cuidar los detalles para que funcionen bien. También me adapto a lo que necesita cada cliente, dejando espacio para aclarar ideas y especificar lo que haga falta.</p>
+          <div class="actions">
+            <a class="btn primary" href="#proyectos" data-i18n="viewProjects">Explorar proyectos ↘</a>
+            <a class="btn" href="https://github.com/xzaorsdev" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="portal"><div class="cube"></div></div>
+          <span class="floating-tag tag-a">THE END // 01</span>
+          <span class="floating-tag tag-b">[ MODDING.exe ]</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="sobre">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="kicker" data-i18n="aboutKicker">01 // PERFIL</div>
+          <h2 data-i18n="aboutTitle">Construyo ideas bloque a bloque.</h2>
+          <p class="section-copy" data-i18n="aboutCopy">Me interesa crear experiencias con personalidad, sistemas bien pensados y una experiencia de uso clara.</p>
+        </div>
+        <div class="about-panel reveal">
+          <div class="pixel-icon" aria-hidden="true">✦</div>
+          <p data-i18n="aboutBody">Disfruto desarrollar proyectos de Minecraft con profundidad y atención al detalle. Mi forma de trabajar busca adaptarse a las necesidades de cada cliente: puedes aclarar requisitos, proponer cambios y especificar lo que necesitas durante el proceso.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="proyectos">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="kicker" data-i18n="projectsKicker">02 // LABORATORIO</div>
+          <h2 data-i18n="projectsTitle">Proyectos seleccionados</h2>
+          <p class="section-copy" data-i18n="projectsCopy">Mods y juegos en desarrollo, nacidos de probar ideas y convertirlas en algo jugable.</p>
+        </div>
+        <div class="projects">
+          <article class="project-card reveal">
+            <div class="project-banner" aria-hidden="true"><span class="banner-symbol">▣</span></div>
+            <div class="project-content">
+              <div class="project-top"><h3>Pocket Shulker</h3><span class="pill" data-i18n="modPill">MOD · MINECRAFT</span></div>
+              <p data-i18n="pocketDesc">Un objeto de almacenamiento portátil con 27 espacios para Minecraft Java 1.20.1 con Forge. Abre tu almacenamiento sin colocar un bloque.</p>
+              <div class="project-foot"><span class="tech">Java · Forge 1.20.1</span><a class="text-link" href="https://www.curseforge.com/minecraft/mc-mods/zaors-pocket-shulker/preview" target="_blank" rel="noopener noreferrer" data-i18n="curseforgeLink">Ver en CurseForge ↗</a></div>
+            </div>
+          </article>
+          <article class="project-card reveal">
+            <div class="project-banner" aria-hidden="true"><span class="banner-symbol">⚽</span></div>
+            <div class="project-content">
+              <div class="project-top"><h3>Football Game</h3><span class="pill" data-i18n="devPill">EN DESARROLLO</span></div>
+              <p data-i18n="footballDesc">Un proyecto de fútbol centrado en llevar el movimiento de los jugadores, el balón y la lógica del partido a una experiencia interactiva.</p>
+              <div class="project-foot"><span class="tech">Game development</span><a class="text-link" href="https://github.com/xzaorsdev" target="_blank" rel="noopener noreferrer" data-i18n="githubProjectLink">Ver perfil de GitHub ↗</a></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="enfoque">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="kicker" data-i18n="approachKicker">03 // ENFOQUE</div>
+          <h2 data-i18n="approachTitle">Detalles que importan.</h2>
+        </div>
+        <div class="skill-grid">
+          <div class="skill-panel reveal"><strong data-i18n="focusOne">Diseño con intención</strong><span data-i18n="focusOneCopy">Sistemas que encajan con el propósito del proyecto.</span></div>
+          <div class="skill-panel reveal"><strong data-i18n="focusTwo">Iteración y claridad</strong><span data-i18n="focusTwoCopy">Requisitos abiertos a aclaraciones y ajustes.</span></div>
+          <div class="skill-panel reveal"><strong data-i18n="focusThree">Minecraft &amp; juegos</strong><span data-i18n="focusThreeCopy">Prototipos, mods y nuevas ideas jugables.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto">
+      <div class="wrap">
+        <div class="contact-box reveal">
+          <div>
+            <div class="kicker" data-i18n="contactKicker">04 // CONECTEMOS</div>
+            <h2 data-i18n="contactTitle">¿Tienes una idea?</h2>
+            <p data-i18n="contactCopy">Puedes explorar mi código y mis proyectos en GitHub.</p>
+          </div>
+          <a class="btn primary" href="https://github.com/xzaorsdev" target="_blank" rel="noopener noreferrer" data-i18n="contactButton">Visitar GitHub ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <span>© <span id="year"></span> XZaorsDev</span>
+      <span data-i18n="footerText">Hecho con código, paciencia y energía del End.</span>
+    </div>
+  </footer>
+
+  <script>
+    const translations = {
+      es: {
+        navAbout:"Sobre mí", navProjects:"Proyectos", navContact:"Contacto",
+        eyebrow:"CREANDO EN EL END", heroPrefix:"Hola, soy",
+        intro:"Me gusta crear proyectos de Minecraft profundos y cuidar los detalles para que funcionen bien. También me adapto a lo que necesita cada cliente, dejando espacio para aclarar ideas y especificar lo que haga falta.",
+        viewProjects:"Explorar proyectos ↘",
+        aboutKicker:"01 // PERFIL", aboutTitle:"Construyo ideas bloque a bloque.",
+        aboutCopy:"Me interesa crear experiencias con personalidad, sistemas bien pensados y una experiencia de uso clara.",
+        aboutBody:"Disfruto desarrollar proyectos de Minecraft con profundidad y atención al detalle. Mi forma de trabajar busca adaptarse a las necesidades de cada cliente: puedes aclarar requisitos, proponer cambios y especificar lo que necesitas durante el proceso.",
+        projectsKicker:"02 // LABORATORIO", projectsTitle:"Proyectos seleccionados",
+        projectsCopy:"Mods y juegos en desarrollo, nacidos de probar ideas y convertirlas en algo jugable.",
+        modPill:"MOD · MINECRAFT", pocketDesc:"Un objeto de almacenamiento portátil con 27 espacios para Minecraft Java 1.20.1 con Forge. Abre tu almacenamiento sin colocar un bloque.",
+        curseforgeLink:"Ver en CurseForge ↗", devPill:"EN DESARROLLO",
+        footballDesc:"Un proyecto de fútbol centrado en llevar el movimiento de los jugadores, el balón y la lógica del partido a una experiencia interactiva.",
+        githubProjectLink:"Ver perfil de GitHub ↗", approachKicker:"03 // ENFOQUE",
+        approachTitle:"Detalles que importan.", focusOne:"Diseño con intención",
+        focusOneCopy:"Sistemas que encajan con el propósito del proyecto.", focusTwo:"Iteración y claridad",
+        focusTwoCopy:"Requisitos abiertos a aclaraciones y ajustes.", focusThree:"Minecraft & juegos",
+        focusThreeCopy:"Prototipos, mods y nuevas ideas jugables.", contactKicker:"04 // CONECTEMOS",
+        contactTitle:"¿Tienes una idea?", contactCopy:"Puedes explorar mi código y mis proyectos en GitHub.",
+        contactButton:"Visitar GitHub ↗", footerText:"Hecho con código, paciencia y energía del End."
+      },
+      en: {
+        navAbout:"About", navProjects:"Projects", navContact:"Contact",
+        eyebrow:"BUILDING IN THE END", heroPrefix:"Hey, I'm",
+        intro:"I enjoy building deep Minecraft projects and paying attention to the details that help them work well. I also adapt to each client's needs, leaving room to clarify ideas and specify requirements throughout the process.",
+        viewProjects:"Explore projects ↘",
+        aboutKicker:"01 // PROFILE", aboutTitle:"Building ideas, block by block.",
+        aboutCopy:"I'm interested in creating distinctive experiences, thoughtful systems, and clear user experiences.",
+        aboutBody:"I enjoy developing Minecraft projects with depth and attention to detail. My workflow aims to adapt to each client's needs: you can clarify requirements, suggest changes, and specify what you need throughout the process.",
+        projectsKicker:"02 // LAB", projectsTitle:"Selected projects",
+        projectsCopy:"Mods and games in progress, shaped by testing ideas and turning them into playable experiences.",
+        modPill:"MOD · MINECRAFT", pocketDesc:"A portable 27-slot storage item for Minecraft Java 1.20.1 with Forge. Access your storage without placing a block.",
+        curseforgeLink:"View on CurseForge ↗", devPill:"IN DEVELOPMENT",
+        footballDesc:"A football game project focused on bringing player movement, ball physics, and match logic into an interactive experience.",
+        githubProjectLink:"View GitHub profile ↗", approachKicker:"03 // APPROACH",
+        approachTitle:"Details matter.", focusOne:"Intentional design",
+        focusOneCopy:"Systems built around the project's purpose.", focusTwo:"Iteration & clarity",
+        focusTwoCopy:"Requirements open to clarification and refinement.", focusThree:"Minecraft & games",
+        focusThreeCopy:"Prototypes, mods, and new playable ideas.", contactKicker:"04 // LET'S CONNECT",
+        contactTitle:"Have an idea?", contactCopy:"Explore my code and projects on GitHub.",
+        contactButton:"Visit GitHub ↗", footerText:"Made with code, patience, and End energy."
+      }
+    };
+    let currentLanguage = "es";
+    const toggle = document.getElementById("languageToggle");
+    toggle.addEventListener("click", () => {
+      currentLanguage = currentLanguage === "es" ? "en" : "es";
+      document.documentElement.lang = currentLanguage;
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (translations[currentLanguage][key]) el.textContent = translations[currentLanguage][key];
+      });
+      toggle.textContent = currentLanguage === "es" ? "EN / ES" : "ES / EN";
+      toggle.setAttribute("aria-label", currentLanguage === "es" ? "Switch language to English" : "Cambiar idioma a español");
+    });
+    document.getElementById("year").textContent = new Date().getFullYear();
+    const observer = ("IntersectionObserver" in window) ? new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 }) : null;
+    document.querySelectorAll(".reveal").forEach(el => {
+      if (observer) observer.observe(el); else el.classList.add("visible");
+    });
+  </script>
+</body>
+</html>
 
